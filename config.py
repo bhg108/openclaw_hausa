@@ -1,7 +1,7 @@
 import os
-from dotenv import load_dotenv
+from pathlib import Path
 
-load_dotenv("/Users/mac13/danbello-news/.env")
+BASE_DIR = Path(__file__).resolve().parent
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
@@ -16,7 +16,24 @@ if not OPENAI_API_KEY:
 
 CHAT_ID = int(TELEGRAM_CHAT_ID)
 
-DATA_DIR = "/Users/mac13/danbello-news/openclaw_hausa"
+# ✅ FIXED PATHS (THIS IS THE KEY PART)
+DATA_DIR = BASE_DIR / "data"
+DB_PATH = DATA_DIR / "openclaw.db"
+
+
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+if not TELEGRAM_BOT_TOKEN:
+    raise ValueError("Missing TELEGRAM_BOT_TOKEN")
+if not TELEGRAM_CHAT_ID:
+    raise ValueError("Missing TELEGRAM_CHAT_ID")
+if not OPENAI_API_KEY:
+    raise ValueError("Missing OPENAI_API_KEY")
+
+CHAT_ID = int(TELEGRAM_CHAT_ID)
+
 DB_PATH = os.path.join(DATA_DIR, "openclaw.db")
 
 CHECK_INTERVAL_SECONDS = 300
