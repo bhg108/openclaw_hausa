@@ -1,0 +1,98 @@
+import asyncio
+from config import CHECK_INTERVAL_SECONDS, MIN_CLUSTER_SCORE_TO_PUBLISH
+from memory import (
+    init_db, save_articles, was_cluster_published, mark_cluster_published,
+    get_story_memory, update_story_memory, story_recently_published
+)
+from observer import fetch_articles
+from clusterer import cluster_articles
+from ranker import rank_clusters
+from editor import generate_new_story_post, generate_update_post
+from publisher import publish_cluster_post
+
+def choose_best_publishable_cluster(clusters):
+    for cluster in clusters:
+        if was_cluster_published(cluster["signature"]):
+            continue
+        if cluster["score"] < MIN_CLUSTER_SCORE_TO_PUBLISH:
+            continue
+        if story_recently_published(cluster["story_key"]):
+            continue
+        return cluster
+    return None
+
+async def publish_cluster(cluster):
+    story_record = get_story_memory(cluster["story_key"])
+
+    if story_record:
+        previous_headline = story_record[2]
+        previous_summary = story_record[3]
+        text = generate_update_post(cluster, previous_headline, previous_summary)
+        mode = "update"
+    else:
+        text = generate_new_story_post(cluster)
+        mode = "new"
+
+    await publish_cluster_post(text, cluster)
+
+    headline = cluster["articles"][0]["title"]
+    summary = cluster["articles"][0]["summary"]
+
+    mark_cluster_published(
+        cluster["signature"],
+        cluster["story_key"],
+        cluster["category"],
+        headline,
+        cluster["score"],
+        mode
+    )
+
+    update_story_memory(
+        cluster["story_key"],
+        cluster["category"],
+        headline,
+        summary
+    )
+
+    print(f"Published cluster as {mode}.")
+
+async def run_once():
+    print("Observing feeds...")
+    articles = fetch_articles()
+    print(f"Fetched articles: {len(articles)}")
+
+    save_articles(articles)
+
+    clusters = cluster_articles(articles)
+    print(f"Story clusters: {len(clusters)}")
+
+    ranked = rank_clusters(clusters)
+    best = choose_best_publishable_cluster(ranked)
+
+    if not best:
+        print("No strong publishable cluster found.")
+        return
+
+    print("Chosen cluster:")
+    print(f"  Category: {best['category']}")
+    print(f"  Size: {best['size']}")
+    print(f"  Score: {best['score']}")
+    print(f"  Breaking: {best['breaking']}")
+    print(f"  Story key: {best['story_key']}")
+
+    await publish_cluster(best)
+
+async def main():
+    init_db()
+
+    while True:
+        try:
+            await run_once()
+        except Exception as e:
+            print("Run error:", e)
+
+        print(f"Sleeping for {CHECK_INTERVAL_SECONDS} seconds...")
+        await asyncio.sleep(CHECK_INTERVAL_SECONDS)
+
+if __name__ == "__main__":
+    asyncio.run(main())

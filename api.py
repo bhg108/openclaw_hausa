@@ -1,0 +1,45 @@
+import json
+from pathlib import Path
+from flask import Flask, jsonify, send_from_directory
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+BASE_DIR = Path.home() / "danbello-news" / "openclaw_hausa"
+FEED_PATH = BASE_DIR / "latest_feed.json"
+IMAGES_DIR = BASE_DIR / "images"
+
+@app.route("/")
+def home():
+    return jsonify({"status": "ok", "service": "openclaw_hausa_api"})
+
+@app.route("/top-story")
+def top_story():
+    if not FEED_PATH.exists():
+        return jsonify({"error": "No feed file found"}), 404
+
+    try:
+        data = json.loads(FEED_PATH.read_text(encoding="utf-8"))
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/latest")
+def latest():
+    if not FEED_PATH.exists():
+        return jsonify([])
+
+    try:
+        data = json.loads(FEED_PATH.read_text(encoding="utf-8"))
+        return jsonify(data if isinstance(data, list) else [data])
+    except Exception:
+        return jsonify([])
+
+
+@app.route("/images/<path:filename>")
+def images(filename):
+    return send_from_directory(IMAGES_DIR, filename)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=False)

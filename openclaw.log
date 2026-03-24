@@ -1,0 +1,439 @@
+/Users/mac13/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+Observing feeds...
+Fetched articles: 72
+Story clusters: 59
+Chosen cluster:
+  Category: Najeriya
+  Size: 2
+  Score: 35
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 72
+Story clusters: 59
+Chosen cluster:
+  Category: Najeriya
+  Size: 4
+  Score: 35
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 72
+Story clusters: 58
+Chosen cluster:
+  Category: Tattalin Arziki
+  Size: 1
+  Score: 35
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 72
+Story clusters: 58
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 35
+  Breaking: True
+Run error: Connection error.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 72
+Story clusters: 58
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 35
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 72
+Story clusters: 58
+Chosen cluster:
+  Category: Duniya
+  Size: 8
+  Score: 35
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 72
+Story clusters: 59
+Chosen cluster:
+  Category: Najeriya
+  Size: 3
+  Score: 35
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 72
+Story clusters: 59
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 34
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 72
+Story clusters: 59
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 33
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 67
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 46
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 67
+Chosen cluster:
+  Category: Tattalin Arziki
+  Size: 1
+  Score: 37
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 66
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 33
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 66
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 33
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 66
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 32
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 66
+Chosen cluster:
+  Category: Najeriya
+  Size: 4
+  Score: 32
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 65
+Chosen cluster:
+  Category: Najeriya
+  Size: 3
+  Score: 54
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 63
+Chosen cluster:
+  Category: Najeriya
+  Size: 6
+  Score: 54
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 64
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 35
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 64
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 32
+  Breaking: True
+Run error: Connection error.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 64
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 32
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 64
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 31
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 79
+Story clusters: 64
+Chosen cluster:
+  Category: Najeriya
+  Size: 5
+  Score: 51
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 66
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 35
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 66
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 31
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 67
+Chosen cluster:
+  Category: Najeriya
+  Size: 4
+  Score: 51
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 67
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 34
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 67
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 41
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 67
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 31
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 67
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 31
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 67
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 30
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 67
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 30
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 67
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 31
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 67
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 30
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 68
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 40
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 68
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 37
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 69
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 39
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 70
+Chosen cluster:
+  Category: Duniya
+  Size: 1
+  Score: 35
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 69
+Chosen cluster:
+  Category: Duniya
+  Size: 7
+  Score: 33
+  Breaking: True
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 69
+Chosen cluster:
+  Category: Najeriya
+  Size: 3
+  Score: 34
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 69
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 31
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 69
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 31
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 80
+Story clusters: 69
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 31
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 72
+Story clusters: 64
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 30
+  Breaking: False
+Published best cluster.
+Sleeping for 300 seconds...
+Observing feeds...
+Fetched articles: 72
+Story clusters: 64
+Chosen cluster:
+  Category: Najeriya
+  Size: 1
+  Score: 30
