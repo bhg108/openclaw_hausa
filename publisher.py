@@ -127,12 +127,29 @@ def save_latest_feed(text, cluster, image_url=""):
         "relevance_score": cluster.get("relevance_score", 0)
     }
 
-    existing = []
-    if FEED_PATH.exists():
-        try:
+    import time
+
+    for _ in range(3):
+    try:
+        if FEED_PATH.exists():
             existing = json.loads(FEED_PATH.read_text(encoding="utf-8"))
-        except:
+        else:
             existing = []
+
+        if not isinstance(existing, list):
+            existing = []
+
+        existing.insert(0, payload)
+        existing = existing[:20]
+
+        FEED_PATH.write_text(
+            json.dumps(existing, ensure_ascii=False, indent=2),
+            encoding="utf-8"
+        )
+        break
+
+    except Exception as e:
+        time.sleep(0.2)
 
     if not isinstance(existing, list):
         existing = []
