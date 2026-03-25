@@ -118,6 +118,8 @@ def save_latest_feed(text: str, cluster: dict, image_url: str = "") -> None:
     headline, summary, full_text = extract_headline_summary_fulltext(text)
     local_image_url = cache_image_locally(image_url)
 
+    story_key = cluster.get("story_key", "")
+
     payload = {
         "headline": headline,
         "summary": summary,
@@ -125,7 +127,7 @@ def save_latest_feed(text: str, cluster: dict, image_url: str = "") -> None:
         "category": cluster.get("category", "Labari"),
         "published_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "mode": "new",
-        "story_key": cluster.get("story_key", ""),
+        "story_key": story_key,
         "image_url": local_image_url,
         "relevance_score": cluster.get("relevance_score", 0),
     }
@@ -139,6 +141,13 @@ def save_latest_feed(text: str, cluster: dict, image_url: str = "") -> None:
 
             if not isinstance(existing, list):
                 existing = []
+
+            # Remove duplicates by story_key
+            if story_key:
+                existing = [
+                    item for item in existing
+                    if item.get("story_key", "") != story_key
+                ]
 
             existing.insert(0, payload)
             existing = existing[:20]
