@@ -25,8 +25,10 @@ def top_story():
 
     try:
         data = json.loads(FEED_PATH.read_text(encoding="utf-8"))
-        if isinstance(data, list) and data:
+
+        if isinstance(data, list) and len(data) > 0:
             return jsonify(data[0])
+
         return jsonify({"error": "No stories available"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
