@@ -1,5 +1,7 @@
 import json
+import os
 from pathlib import Path
+
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 
@@ -10,9 +12,11 @@ BASE_DIR = Path.home() / "danbello-news" / "openclaw_hausa"
 FEED_PATH = BASE_DIR / "latest_feed.json"
 IMAGES_DIR = BASE_DIR / "images"
 
+
 @app.route("/")
 def home():
     return jsonify({"status": "ok", "service": "openclaw_hausa_api"})
+
 
 @app.route("/top-story")
 def top_story():
@@ -21,12 +25,12 @@ def top_story():
 
     try:
         data = json.loads(FEED_PATH.read_text(encoding="utf-8"))
-        return jsonify(data)
+        if isinstance(data, list) and data:
+            return jsonify(data[0])
+        return jsonify({"error": "No stories available"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-from memory import get_conn
-from flask import jsonify
 
 @app.route("/latest")
 def latest():
@@ -35,7 +39,9 @@ def latest():
 
     try:
         data = json.loads(FEED_PATH.read_text(encoding="utf-8"))
-        return jsonify(data)
+        if isinstance(data, list):
+            return jsonify(data)
+        return jsonify([])
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -44,7 +50,7 @@ def latest():
 def images(filename):
     return send_from_directory(IMAGES_DIR, filename)
 
+
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False)
