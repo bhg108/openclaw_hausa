@@ -11,7 +11,11 @@ CORS(app)
 BASE_DIR = Path.home() / "danbello-news" / "openclaw_hausa"
 FEED_PATH = BASE_DIR / "latest_feed.json"
 IMAGES_DIR = BASE_DIR / "images"
-EDITORIAL_PATH = BASE_DIR / "editorial.json"
+BASE_DIR = Path.home() / "danbello-news" / "openclaw_hausa"
+REPO_DIR = Path(__file__).resolve().parent
+FEED_PATH = BASE_DIR / "latest_feed.json"
+IMAGES_DIR = BASE_DIR / "images"
+EDITORIAL_PATH = REPO_DIR / "editorial.json"
 
 
 @app.route("/")
