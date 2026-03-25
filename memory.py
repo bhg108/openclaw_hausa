@@ -82,7 +82,7 @@ def mark_cluster_published(signature, story_key, category, headline, score, mode
     conn = get_conn()
     cur = conn.cursor()
     cur.execute("""
-    INSERT OR REPLACE INTO published_clusters
+    INSERT OR INTO published_clusters
     (cluster_signature, story_key, category, headline, score, mode)
     VALUES (?, ?, ?, ?, ?, ?)
     """, (signature, story_key, category, headline, score, mode))
