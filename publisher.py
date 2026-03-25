@@ -18,6 +18,9 @@ IMAGES_DIR = Path.home() / "danbello-news" / "openclaw_hausa" / "images"
 IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
 
+# =========================
+# IMAGE HANDLING
+# =========================
 def cache_image_locally(image_url: str) -> str:
     if not image_url:
         return ""
@@ -45,75 +48,84 @@ def cache_image_locally(image_url: str) -> str:
         return ""
 
 
+# =========================
+# 🔥 STRONG HEADLINE FIX
+# =========================
 def extract_headline_summary_fulltext(text: str) -> tuple[str, str, str]:
-    parts = [p.strip() for p in text.split("\n\n") if p.strip()]
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
 
-    headline = ""
-    summary = ""
-    full_text = text.strip()
-
-    if parts:
-        headline = parts[0]
-
-    if len(parts) >= 2:
-        summary = parts[1]
-    elif headline:
-        summary = headline
-
-    return headline, summary, full_text
-
-
-def extract_headline_and_summary(text: str) -> tuple[str, str]:
-    lines = [line.strip() for line in text.splitlines() if line.strip()]
-
-    skip_prefixes = (
-        "📍", "🕒", "⚡", "💰", "🌍", "🇳🇬", "⚽", "🧠",
-        "Manyan majiyoyi", "Majiyoyi", "Source", "Sources",
-    )
-
-    skip_exact = {
-        "Takaitaccen bayani:",
+    skip_words = [
         "Takaitaccen bayani",
-        "Dalilin da ya sa wannan yake da muhimmanci:",
-        "Dalilin da ya sa wannan yake da muhimmanci",
-    }
+        "Manyan majiyoyi",
+        "Majiyoyi",
+        "Source",
+        "Sources",
+    ]
 
-    cleaned: list[str] = []
+    cleaned = []
     for line in lines:
-        if line in skip_exact:
+        lower = line.lower()
+
+        if any(word.lower() in lower for word in skip_words):
             continue
-        if line.startswith(skip_prefixes):
+
+        if line.startswith(("⚡", "🇳🇬", "🌍", "💰", "⚽", "🧠")):
             continue
+
         cleaned.append(line)
 
-    if not cleaned:
-        return "Babban Labari", "Babu takaitaccen bayani."
+    # HEADLINE
+    headline = ""
+    for line in cleaned:
+        if len(line) > 20:
+            headline = line
+            break
 
-    first = cleaned[0]
-    parts = [p.strip() for p in first.replace("?", ".").replace("!", ".").split(".") if p.strip()]
-
-    headline = parts[0] if parts else first
-    summary = ""
+    if not headline:
+        headline = "Babban Labari"
 
     if len(headline) > 120:
-        words = headline.split()
-        headline = " ".join(words[:14]).strip()
+        headline = " ".join(headline.split()[:14])
 
-    if len(parts) > 1:
-        summary = ". ".join(parts[1:]).strip()
-        if summary and not summary.endswith("."):
-            summary += "."
-    elif len(cleaned) > 1:
-        summary = cleaned[1]
-    else:
-        summary = first
-
-    if len(summary) < 30 and len(cleaned) > 1:
+    # SUMMARY
+    summary = ""
+    if len(cleaned) > 1:
         summary = cleaned[1]
 
-    return headline, summary
+    if len(summary) < 30 and len(cleaned) > 2:
+        summary = cleaned[2]
+
+    if not summary:
+        summary = headline
+
+    return headline, summary, text.strip()
 
 
+# =========================
+# IMAGE FROM ARTICLE
+# =========================
+def get_image_from_article(url: str) -> str | None:
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=8)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        og = soup.find("meta", property="og:image")
+        if og and og.get("content"):
+            return og["content"]
+
+        tw = soup.find("meta", attrs={"name": "twitter:image"})
+        if tw and tw.get("content"):
+            return tw["content"]
+    except Exception:
+        return None
+
+    return None
+
+
+# =========================
+# 💣 FIXED SAVE FUNCTION
+# =========================
 def save_latest_feed(text: str, cluster: dict, image_url: str = "") -> None:
     headline, summary, full_text = extract_headline_summary_fulltext(text)
     local_image_url = cache_image_locally(image_url)
@@ -142,18 +154,20 @@ def save_latest_feed(text: str, cluster: dict, image_url: str = "") -> None:
             if not isinstance(existing, list):
                 existing = []
 
-            # Remove duplicates by story_key
-            if story_key:
-                existing = [
-                    item for item in existing
-                    if item.get("story_key", "") != story_key
-                ]
+            # 🚫 REMOVE DUPLICATES
+            filtered = []
+            for item in existing:
+                if item.get("story_key") != story_key:
+                    filtered.append(item)
 
-            existing.insert(0, payload)
-            existing = existing[:20]
+            # ➕ INSERT NEW STORY
+            filtered.insert(0, payload)
+
+            # ✂️ LIMIT
+            filtered = filtered[:20]
 
             FEED_PATH.write_text(
-                json.dumps(existing, ensure_ascii=False, indent=2),
+                json.dumps(filtered, ensure_ascii=False, indent=2),
                 encoding="utf-8",
             )
             return
@@ -166,25 +180,9 @@ def save_latest_feed(text: str, cluster: dict, image_url: str = "") -> None:
     )
 
 
-def get_image_from_article(url: str) -> str | None:
-    try:
-        response = requests.get(url, headers=HEADERS, timeout=8)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
-
-        og = soup.find("meta", property="og:image")
-        if og and og.get("content"):
-            return og["content"]
-
-        tw = soup.find("meta", attrs={"name": "twitter:image"})
-        if tw and tw.get("content"):
-            return tw["content"]
-    except Exception:
-        return None
-
-    return None
-
-
+# =========================
+# PUBLISH
+# =========================
 async def publish_cluster_post(text: str, cluster: dict) -> None:
     image_url = None
 
