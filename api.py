@@ -27,7 +27,7 @@ def top_story():
         data = json.loads(FEED_PATH.read_text(encoding="utf-8"))
 
         if isinstance(data, list) and len(data) > 0:
-            return jsonify([data[0]])  # return ONE-ITEM LIST
+            return jsonify([data[0]])
 
         return jsonify([])
     except Exception as e:
