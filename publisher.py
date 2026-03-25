@@ -130,17 +130,17 @@ def save_latest_feed(text, cluster, image_url=""):
     import time
 
     for _ in range(3):
-    try:
-        if FEED_PATH.exists():
-            existing = json.loads(FEED_PATH.read_text(encoding="utf-8"))
-        else:
-            existing = []
+        try:
+            if FEED_PATH.exists():
+                existing = json.loads(FEED_PATH.read_text(encoding="utf-8"))
+            else:
+                existing = []
 
-        if not isinstance(existing, list):
-            existing = []
+            if not isinstance(existing, list):
+                existing = []
 
-        existing.insert(0, payload)
-        existing = existing[:20]
+            existing.insert(0, payload)
+            existing = existing[:20]
 
         FEED_PATH.write_text(
             json.dumps(existing, ensure_ascii=False, indent=2),
