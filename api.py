@@ -21,15 +21,15 @@ def home():
 @app.route("/top-story")
 def top_story():
     if not FEED_PATH.exists():
-        return jsonify({"error": "No feed file found"}), 404
+        return jsonify([])
 
     try:
         data = json.loads(FEED_PATH.read_text(encoding="utf-8"))
 
         if isinstance(data, list) and len(data) > 0:
-            return jsonify(data[0])
+            return jsonify([data[0]])  # return ONE-ITEM LIST
 
-        return jsonify({"error": "No stories available"}), 404
+        return jsonify([])
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
