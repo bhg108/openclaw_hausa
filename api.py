@@ -30,30 +30,14 @@ from flask import jsonify
 
 @app.route("/latest")
 def latest():
-    conn = get_conn()
-    cur = conn.cursor()
+    if not FEED_PATH.exists():
+        return jsonify([])
 
-    cur.execute("""
-        SELECT headline, category, published_at, story_key, score
-        FROM published_clusters
-        ORDER BY published_at DESC
-        LIMIT 20
-    """)
-
-    rows = cur.fetchall()
-    conn.close()
-
-    result = []
-    for r in rows:
-        result.append({
-            "headline": r[0],
-            "category": r[1],
-            "published_at": r[2],
-            "story_key": r[3],
-            "score": r[4],
-        })
-
-    return jsonify(result)
+    try:
+        data = json.loads(FEED_PATH.read_text(encoding="utf-8"))
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/images/<path:filename>")
