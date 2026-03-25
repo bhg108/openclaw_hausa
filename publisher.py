@@ -1,19 +1,24 @@
+import hashlib
+import json
+import time
+from datetime import datetime
+from pathlib import Path
+
 import requests
 from bs4 import BeautifulSoup
 from telegram import Bot
-from config import TELEGRAM_BOT_TOKEN, CHAT_ID, HEADERS
-import json
-import hashlib
-from pathlib import Path
-from datetime import datetime
+
+from config import CHAT_ID, HEADERS, TELEGRAM_BOT_TOKEN
 
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
+
+BASE_URL = "https://openclaw-hausa.onrender.com"
 FEED_PATH = Path.home() / "danbello-news" / "openclaw_hausa" / "latest_feed.json"
 IMAGES_DIR = Path.home() / "danbello-news" / "openclaw_hausa" / "images"
 IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def cache_image_locally(image_url):
+def cache_image_locally(image_url: str) -> str:
     if not image_url:
         return ""
 
@@ -35,12 +40,12 @@ def cache_image_locally(image_url):
             r.raise_for_status()
             out_path.write_bytes(r.content)
 
-        return f"http://127.0.0.1:5000/images/{name}"
+        return f"{BASE_URL}/images/{name}"
     except Exception:
         return ""
 
 
-def extract_headline_summary_fulltext(text):
+def extract_headline_summary_fulltext(text: str) -> tuple[str, str, str]:
     parts = [p.strip() for p in text.split("\n\n") if p.strip()]
 
     headline = ""
@@ -57,12 +62,13 @@ def extract_headline_summary_fulltext(text):
 
     return headline, summary, full_text
 
-def extract_headline_and_summary(text):
+
+def extract_headline_and_summary(text: str) -> tuple[str, str]:
     lines = [line.strip() for line in text.splitlines() if line.strip()]
 
     skip_prefixes = (
         "📍", "🕒", "⚡", "💰", "🌍", "🇳🇬", "⚽", "🧠",
-        "Manyan majiyoyi", "Majiyoyi", "Source", "Sources"
+        "Manyan majiyoyi", "Majiyoyi", "Source", "Sources",
     )
 
     skip_exact = {
@@ -72,7 +78,7 @@ def extract_headline_and_summary(text):
         "Dalilin da ya sa wannan yake da muhimmanci",
     }
 
-    cleaned = []
+    cleaned: list[str] = []
     for line in lines:
         if line in skip_exact:
             continue
@@ -84,19 +90,15 @@ def extract_headline_and_summary(text):
         return "Babban Labari", "Babu takaitaccen bayani."
 
     first = cleaned[0]
-
-    # Split first paragraph into sentences
     parts = [p.strip() for p in first.replace("?", ".").replace("!", ".").split(".") if p.strip()]
 
     headline = parts[0] if parts else first
     summary = ""
 
-    # Keep headline short
     if len(headline) > 120:
         words = headline.split()
         headline = " ".join(words[:14]).strip()
 
-    # Summary = rest of first paragraph, or next paragraph
     if len(parts) > 1:
         summary = ". ".join(parts[1:]).strip()
         if summary and not summary.endswith("."):
@@ -111,7 +113,8 @@ def extract_headline_and_summary(text):
 
     return headline, summary
 
-def save_latest_feed(text, cluster, image_url=""):
+
+def save_latest_feed(text: str, cluster: dict, image_url: str = "") -> None:
     headline, summary, full_text = extract_headline_summary_fulltext(text)
     local_image_url = cache_image_locally(image_url)
 
@@ -124,10 +127,8 @@ def save_latest_feed(text, cluster, image_url=""):
         "mode": "new",
         "story_key": cluster.get("story_key", ""),
         "image_url": local_image_url,
-        "relevance_score": cluster.get("relevance_score", 0)
+        "relevance_score": cluster.get("relevance_score", 0),
     }
-
-    import time
 
     for _ in range(3):
         try:
@@ -142,27 +143,21 @@ def save_latest_feed(text, cluster, image_url=""):
             existing.insert(0, payload)
             existing = existing[:20]
 
-        FEED_PATH.write_text(
-            json.dumps(existing, ensure_ascii=False, indent=2),
-            encoding="utf-8"
-        )
-        break
-
-    except Exception as e:
-        time.sleep(0.2)
-
-    if not isinstance(existing, list):
-        existing = []
-
-    existing.insert(0, payload)
-    existing = existing[:20]
+            FEED_PATH.write_text(
+                json.dumps(existing, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            return
+        except Exception:
+            time.sleep(0.2)
 
     FEED_PATH.write_text(
-        json.dumps(existing, ensure_ascii=False, indent=2),
-        encoding="utf-8"
+        json.dumps([payload], ensure_ascii=False, indent=2),
+        encoding="utf-8",
     )
 
-def get_image_from_article(url):
+
+def get_image_from_article(url: str) -> str | None:
     try:
         response = requests.get(url, headers=HEADERS, timeout=8)
         response.raise_for_status()
@@ -180,7 +175,8 @@ def get_image_from_article(url):
 
     return None
 
-async def publish_cluster_post(text, cluster):
+
+async def publish_cluster_post(text: str, cluster: dict) -> None:
     image_url = None
 
     for article in cluster["articles"]:
@@ -195,7 +191,7 @@ async def publish_cluster_post(text, cluster):
             await bot.send_photo(
                 chat_id=CHAT_ID,
                 photo=image_url,
-                caption=text[:1024]
+                caption=text[:1024],
             )
             return
         except Exception:
