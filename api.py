@@ -11,6 +11,7 @@ CORS(app)
 BASE_DIR = Path.home() / "danbello-news" / "openclaw_hausa"
 FEED_PATH = BASE_DIR / "latest_feed.json"
 IMAGES_DIR = BASE_DIR / "images"
+EDITORIAL_PATH = BASE_DIR / "editorial.json"
 
 
 @app.route("/")
@@ -44,6 +45,20 @@ def latest():
         if isinstance(data, list):
             return jsonify(data)
         return jsonify([])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/editorial")
+def editorial():
+    if not EDITORIAL_PATH.exists():
+        return jsonify({})
+
+    try:
+        data = json.loads(EDITORIAL_PATH.read_text(encoding="utf-8"))
+        if isinstance(data, dict):
+            return jsonify(data)
+        return jsonify({})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
